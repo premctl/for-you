@@ -596,8 +596,8 @@ html,body{
 
     </div><!-- end slides-container -->
     <!-- Audio -->
-    <audio id="bgMusic" preload="auto" src="chaudhary.mp3"></audio>
-    <audio id="laughAudio" preload="auto" src="her-laugh.m4a"></audio>
+    <audio id="bgMusic" preload="metadata" src="chaudhary.mp3" playsinline></audio>
+    <audio id="laughAudio" preload="metadata" src="her-laugh.m4a" playsinline></audio>
 
     <!-- Music indicator -->
     <div class="music-indicator" id="musicIndicator">
@@ -842,17 +842,27 @@ const bgMusic = document.getElementById('bgMusic');
 const laughAudio = document.getElementById('laughAudio');
 const musicIndicator = document.getElementById('musicIndicator');
 let musicStarted = false;
-const SONG_START = 60; // Start from 1:00
+let musicSeekDone = false;
+const SONG_START = 60;
 
-// Ensure start position whenever playback begins
-bgMusic.addEventListener('playing', () => {
-  if (bgMusic.currentTime < SONG_START - 1) {
+// Safari fix: wait for metadata then seek
+bgMusic.addEventListener('loadedmetadata', () => {
+  try { bgMusic.currentTime = SONG_START; } catch(e) {}
+});
+
+// Safety net: if playback starts before 1:00, force seek
+bgMusic.addEventListener('timeupdate', () => {
+  if (!musicSeekDone && bgMusic.currentTime < SONG_START - 0.5) {
     bgMusic.currentTime = SONG_START;
+  }
+  if (bgMusic.currentTime >= SONG_START) {
+    musicSeekDone = true;
   }
 });
 
 // Loop from 1:00 when song ends
 bgMusic.addEventListener('ended', () => {
+  musicSeekDone = false;
   bgMusic.currentTime = SONG_START;
   bgMusic.play();
 });
@@ -860,28 +870,44 @@ bgMusic.addEventListener('ended', () => {
 function startMusic() {
   if (musicStarted) return;
   musicStarted = true;
-  bgMusic.currentTime = SONG_START;
-  const playAttempt = bgMusic.play();
-  if (playAttempt) {
-    playAttempt.then(() => {
-      bgMusic.currentTime = SONG_START;
+  musicSeekDone = false;
+  
+  // Load first on Safari
+  bgMusic.load();
+  
+  function seekAndPlay() {
+    try { bgMusic.currentTime = SONG_START; } catch(e) {}
+    bgMusic.play().then(() => {
+      try { bgMusic.currentTime = SONG_START; } catch(e) {}
       musicIndicator.classList.remove('paused');
     }).catch(() => {});
+  }
+  
+  if (bgMusic.readyState >= 1) {
+    seekAndPlay();
+  } else {
+    bgMusic.addEventListener('loadedmetadata', seekAndPlay, { once: true });
   }
 }
 
 // Try autoplay when preloader finishes
 setTimeout(() => {
-  bgMusic.currentTime = SONG_START;
-  const p = bgMusic.play();
-  if (p) {
-    p.then(() => {
+  bgMusic.load();
+  function tryAutoplay() {
+    try { bgMusic.currentTime = SONG_START; } catch(e) {}
+    bgMusic.play().then(() => {
       musicStarted = true;
-      bgMusic.currentTime = SONG_START;
+      musicSeekDone = false;
+      try { bgMusic.currentTime = SONG_START; } catch(e) {}
       musicIndicator.classList.remove('paused');
     }).catch(() => {
       musicIndicator.classList.add('paused');
     });
+  }
+  if (bgMusic.readyState >= 1) {
+    tryAutoplay();
+  } else {
+    bgMusic.addEventListener('loadedmetadata', tryAutoplay, { once: true });
   }
 }, 2400);
 
