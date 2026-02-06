@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Your 2025 Wrapped</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,600;0,700;0,800;0,900;1,400;1,700;1,800&family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --spotify-green:#1DB954;
+  --spotify-green-light:#1ed760;
+  --spotify-black:#191414;
+  --spotify-dark:#121212;
+  --spotify-gray:#535353;
+  --spotify-light-gray:#b3b3b3;
+  --white:#FFFFFF;
+}
+html,body{
+  height:100%;
+  overflow:hidden;
+  background:var(--spotify-black);
+  font-family:'Poppins',sans-serif;
+  -webkit-font-smoothing:antialiased;
+  -webkit-tap-highlight-color:transparent;
+  user-select:none;
+}
+
+/* ── WRAPPER ── */
+.app{
+  width:100%;height:100%;
+  display:flex;align-items:center;justify-content:center;
+  background:var(--spotify-black);
+}
+.phone-frame{
+  width:100%;max-width:420px;
+  height:100%;max-height:100vh;
+  position:relative;
+  overflow:hidden;
+}
+@media(min-width:500px){
+  .phone-frame{
+    max-height:90vh;
+    border-radius:24px;
+    box-shadow:0 40px 100px rgba(0,0,0,.5);
+    margin:auto;
+  }
+}
+
+/* ── PROGRESS BARS ── */
+.progress-bar-container{
+  position:absolute;top:0;left:0;right:0;
+  z-index:100;
+  display:flex;gap:3px;
+  padding:12px 12px 0;
+}
+.progress-segment{
+  flex:1;height:3px;
+  background:rgba(255,255,255,.2);
+  border-radius:100px;
+  overflow:hidden;
+  position:relative;
+}
+.progress-segment .fill{
+  position:absolute;top:0;left:0;
+  height:100%;width:0%;
+  background:var(--white);
+  border-radius:100px;
+  transition:width .3s linear;
+}
+.progress-segment.done .fill{width:100%}
+.progress-segment.active .fill{
+  width:100%;
+  transition:width var(--slide-duration) linear;
+}
+
+/* ── SLIDES ── */
+.slides-container{
+  width:100%;height:100%;
+  position:relative;
+}
+.slide{
+  position:absolute;inset:0;
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  padding:4rem 2rem 3rem;
+  text-align:center;
+  opacity:0;
+  visibility:hidden;
+  transition:opacity .4s ease, visibility .4s ease;
+  overflow:hidden;
+}
+.slide.active{opacity:1;visibility:visible}
+
+/* Click zones */
+.click-zone{
+  position:absolute;top:0;height:100%;z-index:50;
+  cursor:pointer;
+}
+.click-zone.left{left:0;width:30%}
+.click-zone.right{right:0;width:70%}
+
+/* ── SLIDE BACKGROUNDS ── */
+.slide-0{background:linear-gradient(135deg,#1a1a2e 0%,var(--spotify-black) 100%)}
+.slide-1{background:linear-gradient(160deg,#E8125C 0%,#F56B2E 50%,#D91B5C 100%)}
+.slide-2{background:linear-gradient(160deg,#2D46B9 0%,#509BF5 40%,#1DB954 100%)}
+.slide-3{background:linear-gradient(160deg,#F037A5 0%,#FFA41B 50%,#F037A5 100%)}
+.slide-4{background:linear-gradient(160deg,#1DB954 0%,#169C46 50%,#1ED760 100%)}
+.slide-5{background:linear-gradient(160deg,#8D67AB 0%,#E8125C 50%,#F56B2E 100%)}
+.slide-6{background:linear-gradient(160deg,#509BF5 0%,#2D46B9 50%,#8D67AB 100%)}
+.slide-7{background:linear-gradient(160deg,#E8125C 0%,#D91B5C 40%,#F037A5 100%)}
+.slide-8{background:linear-gradient(160deg,#1DB954 0%,#509BF5 50%,#1DB954 100%)}
+
+/* ── TYPOGRAPHY ── */
+.slide-eyebrow{
+  font-size:.7rem;
+  font-weight:700;
+  letter-spacing:.15em;
+  text-transform:uppercase;
+  color:rgba(255,255,255,.7);
+  margin-bottom:1.5rem;
+}
+.slide-big-text{
+  font-family:'Montserrat',sans-serif;
+  font-weight:900;
+  font-size:clamp(2.2rem,8vw,3.5rem);
+  line-height:1.05;
+  color:var(--white);
+  letter-spacing:-.02em;
+}
+.slide-big-text .highlight{
+  color:#FFA41B;
+}
+.slide-big-text .green{color:var(--spotify-green-light)}
+.slide-big-text .pink{color:#F037A5}
+.slide-big-text .orange{color:#F56B2E}
+.slide-big-text .blue{color:#509BF5}
+
+.slide-sub{
+  font-size:clamp(.9rem,3vw,1.05rem);
+  font-weight:400;
+  color:rgba(255,255,255,.75);
+  margin-top:1rem;
+  line-height:1.6;
+  max-width:320px;
+}
+.slide-stat{
+  font-family:'Montserrat',sans-serif;
+  font-weight:900;
+  font-size:clamp(4rem,15vw,7rem);
+  line-height:1;
+  color:var(--white);
+  margin:.5rem 0;
+}
+.slide-stat-label{
+  font-size:.75rem;
+  font-weight:600;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  color:rgba(255,255,255,.5);
+}
+
+/* ── SPOTIFY LOGO ── */
+.spotify-logo{
+  position:absolute;top:28px;left:50%;
+  transform:translateX(-50%);
+  z-index:100;
+  display:flex;align-items:center;gap:.4rem;
+}
+.spotify-logo svg{width:22px;height:22px}
+.spotify-logo span{
+  font-family:'Montserrat',sans-serif;
+  font-weight:800;font-size:.75rem;
+  color:var(--white);
+  letter-spacing:.01em;
+}
+
+/* ── INTRO SLIDE ── */
+.intro-year{
+  font-family:'Montserrat',sans-serif;
+  font-weight:900;
+  font-size:clamp(6rem,22vw,10rem);
+  line-height:.85;
+  color:var(--white);
+  opacity:.06;
+  position:absolute;
+  top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  white-space:nowrap;
+}
+.intro-content{position:relative;z-index:1}
+.intro-tag{
+  display:inline-block;
+  padding:.4rem 1rem;
+  border-radius:100px;
+  background:rgba(255,255,255,.1);
+  backdrop-filter:blur(10px);
+  font-size:.7rem;font-weight:600;
+  color:var(--white);
+  letter-spacing:.06em;
+  margin-bottom:2rem;
+}
+.wrapped-title{
+  font-family:'Montserrat',sans-serif;
+  font-weight:900;
+  font-size:clamp(2.5rem,9vw,4rem);
+  line-height:1;
+  color:var(--white);
+  margin-bottom:.5rem;
+}
+.wrapped-title .green{color:var(--spotify-green-light)}
+.intro-subtitle{
+  font-size:1rem;color:rgba(255,255,255,.6);
+  font-weight:400;
+  margin-top:.8rem;
+}
+
+/* ── LIST SLIDE ── */
+.top-list{
+  text-align:left;
+  width:100%;max-width:320px;
+  margin-top:1.5rem;
+}
+.top-item{
+  display:flex;align-items:flex-start;gap:1rem;
+  padding:.8rem 0;
+  border-bottom:1px solid rgba(255,255,255,.08);
+}
+.top-item:last-child{border:none}
+.top-num{
+  font-family:'Montserrat',sans-serif;
+  font-weight:900;font-size:1.8rem;
+  color:rgba(255,255,255,.2);
+  line-height:1;
+  min-width:2rem;
+}
+.top-item-text{
+  font-size:.95rem;font-weight:500;
+  color:var(--white);line-height:1.5;
+}
+.top-item-sub{
+  font-size:.75rem;color:rgba(255,255,255,.45);
+  font-weight:400;margin-top:.1rem;
+}
+
+/* ── PERSONALITY CARD ── */
+.personality-card{
+  background:rgba(0,0,0,.15);
+  backdrop-filter:blur(20px);
+  border-radius:16px;
+  padding:2rem;
+  margin-top:1.5rem;
+  width:100%;max-width:300px;
+  border:1px solid rgba(255,255,255,.08);
+}
+.personality-type{
+  font-family:'Montserrat',sans-serif;
+  font-weight:900;font-size:1.4rem;
+  color:var(--white);
+  margin-bottom:.5rem;
+}
+.personality-desc{
+  font-size:.85rem;color:rgba(255,255,255,.6);
+  font-weight:300;line-height:1.6;
+}
+
+/* ── SHARE BUTTON (non-functional flavor) ── */
+.share-row{
+  position:absolute;bottom:2rem;left:0;right:0;
+  display:flex;justify-content:center;gap:.8rem;
+  z-index:60;
+}
+.share-btn{
+  padding:.6rem 1.5rem;
+  border-radius:100px;
+  font-family:'Poppins',sans-serif;
+  font-size:.75rem;font-weight:600;
+  border:none;cursor:pointer;
+  transition:all .2s ease;
+}
+.share-btn.primary{
+  background:var(--spotify-green);color:var(--spotify-black);
+}
+.share-btn.primary:hover{background:var(--spotify-green-light);transform:scale(1.03)}
+.share-btn.outline{
+  background:transparent;color:var(--white);
+  border:1.5px solid rgba(255,255,255,.3);
+}
+.share-btn.outline:hover{border-color:rgba(255,255,255,.6)}
+
+/* ── VALENTINE ASK SLIDE ── */
+.ask-buttons{
+  display:flex;flex-direction:column;gap:.8rem;
+  margin-top:2rem;width:100%;max-width:280px;
+  position:relative;z-index:60;
+}
+.attempt-text{position:relative;z-index:60}
+.btn-valentine{
+  padding:1rem;
+  border-radius:100px;
+  font-family:'Poppins',sans-serif;
+  font-size:.95rem;font-weight:700;
+  border:none;cursor:pointer;
+  transition:all .3s cubic-bezier(.16,1,.3,1);
+}
+.btn-valentine.yes{
+  background:var(--white);
+  color:var(--spotify-black);
+  box-shadow:0 4px 20px rgba(0,0,0,.2);
+}
+.btn-valentine.yes:hover{
+  transform:scale(1.04);
+  box-shadow:0 8px 30px rgba(0,0,0,.3);
+}
+.btn-valentine.no{
+  background:rgba(255,255,255,.1);
+  color:var(--white);
+  backdrop-filter:blur(10px);
+  border:1px solid rgba(255,255,255,.15);
+}
+.btn-valentine.no:hover{background:rgba(255,255,255,.15)}
+
+.attempt-text{
+  margin-top:.8rem;
+  font-size:.75rem;
+  color:rgba(255,255,255,.4);
+  font-style:italic;
+  min-height:1.2rem;
+}
+
+/* ── CELEBRATION SLIDE ── */
+.celeb-emoji{
+  font-size:4rem;
+  margin-bottom:1rem;
+  animation:celebDance 1s ease infinite;
+}
+@keyframes celebDance{
+  0%,100%{transform:scale(1) rotate(0)}
+  25%{transform:scale(1.15) rotate(-8deg)}
+  50%{transform:scale(1) rotate(0)}
+  75%{transform:scale(1.15) rotate(8deg)}
+}
+.confetti-container{
+  position:absolute;inset:0;
+  pointer-events:none;overflow:hidden;z-index:0;
+}
+.confetti{
+  position:absolute;top:-10px;
+  border-radius:2px;
+  animation:confettiFall linear forwards;
+}
+@keyframes confettiFall{
+  0%{transform:translateY(-5vh) rotate(0) scale(1);opacity:1}
+  85%{opacity:.9}
+  100%{transform:translateY(110vh) rotate(1000deg) scale(.3);opacity:0}
+}
+
+/* ── SLIDE CONTENT ANIMATIONS ── */
+.slide.active .anim-1{opacity:0;animation:slideUp .5s cubic-bezier(.16,1,.3,1) .15s forwards}
+.slide.active .anim-2{opacity:0;animation:slideUp .5s cubic-bezier(.16,1,.3,1) .3s forwards}
+.slide.active .anim-3{opacity:0;animation:slideUp .5s cubic-bezier(.16,1,.3,1) .45s forwards}
+.slide.active .anim-4{opacity:0;animation:slideUp .5s cubic-bezier(.16,1,.3,1) .6s forwards}
+.slide.active .anim-5{opacity:0;animation:slideUp .5s cubic-bezier(.16,1,.3,1) .75s forwards}
+.slide.active .anim-6{opacity:0;animation:slideUp .5s cubic-bezier(.16,1,.3,1) .9s forwards}
+@keyframes slideUp{
+  from{opacity:0;transform:translateY(25px)}
+  to{opacity:1;transform:translateY(0)}
+}
+
+/* ── EQUALIZER BARS ── */
+.equalizer{
+  display:flex;align-items:flex-end;gap:4px;
+  height:60px;margin:1.5rem 0;
+}
+.eq-bar{
+  width:6px;
+  background:var(--white);
+  border-radius:100px;
+  animation:eqBounce .8s ease infinite alternate;
+}
+.eq-bar:nth-child(1){height:20px;animation-delay:0s}
+.eq-bar:nth-child(2){height:40px;animation-delay:.1s}
+.eq-bar:nth-child(3){height:30px;animation-delay:.2s}
+.eq-bar:nth-child(4){height:55px;animation-delay:.15s}
+.eq-bar:nth-child(5){height:25px;animation-delay:.25s}
+.eq-bar:nth-child(6){height:45px;animation-delay:.05s}
+.eq-bar:nth-child(7){height:35px;animation-delay:.3s}
+@keyframes eqBounce{
+  0%{height:15%}100%{height:100%}
+}
+
+/* ── WAVE DECORATION ── */
+.wave{
+  position:absolute;bottom:0;left:0;right:0;
+  height:120px;
+  opacity:.05;
+  overflow:hidden;
+}
+.wave::before{
+  content:'';position:absolute;
+  width:200%;height:100%;bottom:0;left:-50%;
+  background:repeating-radial-gradient(ellipse at 50% 100%,transparent 0,transparent 40px,var(--white) 40px,var(--white) 42px);
+}
+
+/* Tap instruction */
+.tap-hint{
+  position:absolute;bottom:2.5rem;
+  font-size:.7rem;font-weight:500;
+  color:rgba(255,255,255,.3);
+  letter-spacing:.08em;
+}
+</style>
+</head>
+<body>
+
+<div class="app">
+  <div class="phone-frame">
+    
+    <!-- Spotify Logo -->
+    <div class="spotify-logo">
+      <svg viewBox="0 0 24 24" fill="white"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381C8.64 5.801 15.6 6.06 20.04 8.4c.54.3.72 1.02.42 1.56-.3.42-1.02.6-1.38.72z"/></svg>
+      <span>Wrapped</span>
+    </div>
+
+    <!-- Progress Bars -->
+    <div class="progress-bar-container" id="progressBars"></div>
+
+    <!-- Click Zones -->
+    <div class="click-zone left" id="clickLeft"></div>
+    <div class="click-zone right" id="clickRight"></div>
+
+    <!-- SLIDES -->
+    <div class="slides-container" id="slidesContainer">
+
+      <!-- SLIDE 0: Intro -->
+      <div class="slide slide-0 active" data-duration="5000">
+        <div class="intro-year">2025</div>
+        <div class="intro-content">
+          <div class="intro-tag anim-1">♥ Valentine's Edition</div>
+          <div class="wrapped-title anim-2">
+            Relationship<br><span class="green">Wrapped</span>
+          </div>
+          <div class="intro-subtitle anim-3">A year of us. Let's look back.</div>
+          <div class="equalizer anim-4">
+            <div class="eq-bar"></div><div class="eq-bar"></div><div class="eq-bar"></div>
+            <div class="eq-bar"></div><div class="eq-bar"></div><div class="eq-bar"></div>
+            <div class="eq-bar"></div>
+          </div>
+        </div>
+        <div class="tap-hint anim-5">Tap to continue →</div>
+      </div>
+
+      <!-- SLIDE 1: Top Artist -->
+      <div class="slide slide-1" data-duration="6000">
+        <div class="slide-eyebrow anim-1">Your #1 Artist</div>
+        <div class="slide-big-text anim-2">
+          You listened to<br><span class="highlight">Her Voice</span><br>more than anything.
+        </div>
+        <div class="slide-sub anim-3">
+          She was your top artist. Your most played. Your favorite sound on Earth. Nobody else even came close.
+        </div>
+        <div class="wave"></div>
+      </div>
+
+      <!-- SLIDE 2: Minutes Listened -->
+      <div class="slide slide-2" data-duration="6000">
+        <div class="slide-eyebrow anim-1">Total Minutes Thinking About Her</div>
+        <div class="slide-stat anim-2">525,600</div>
+        <div class="slide-stat-label anim-3">MINUTES THIS YEAR</div>
+        <div class="slide-sub anim-4">
+          That's every single minute. You didn't take a break. Not even once. Honestly, kind of impressive.
+        </div>
+      </div>
+
+      <!-- SLIDE 3: Top Genre -->
+      <div class="slide slide-3" data-duration="6000">
+        <div class="slide-eyebrow anim-1">Your Top Genre</div>
+        <div class="slide-big-text anim-2">
+          Your #1 genre<br>was <span class="highlight">Romance.</span>
+        </div>
+        <div class="slide-sub anim-3">
+          Followed by Cheesy, Over-the-top, and Can't-stop-staring-at-her. A very specific taste.
+        </div>
+      </div>
+
+      <!-- SLIDE 4: Most Replayed -->
+      <div class="slide slide-4" data-duration="6000">
+        <div class="slide-eyebrow anim-1">Most Replayed Moment</div>
+        <div class="slide-big-text anim-2">
+          The first time<br>you made<br>her <span style="color:#191414">laugh.</span>
+        </div>
+        <div class="slide-sub anim-3">
+          You've replayed that moment 4,729 times in your head. And it still hits the same way every single time.
+        </div>
+      </div>
+
+      <!-- SLIDE 5: Listening Personality -->
+      <div class="slide slide-5" data-duration="7000">
+        <div class="slide-eyebrow anim-1">Your Listening Personality</div>
+        <div class="personality-card anim-2">
+          <div class="personality-type">The Hopeless One 💘</div>
+          <div class="personality-desc">
+            You're the kind of person who saves every text from her, smiles at your phone in public like an idiot, and has genuinely considered writing a love poem. More than once.
+          </div>
+        </div>
+        <div class="slide-sub anim-3" style="margin-top:1.2rem">
+          Only 0.01% of listeners are this far gone. Congratulations?
+        </div>
+      </div>
+
+      <!-- SLIDE 6: Top 5 -->
+      <div class="slide slide-6" data-duration="9000">
+        <div class="slide-eyebrow anim-1">Your Top 5</div>
+        <div class="slide-big-text anim-2" style="font-size:clamp(1.6rem,5.5vw,2.2rem);margin-bottom:.5rem">
+          Top reasons she's<br>your <span class="highlight">favorite song.</span>
+        </div>
+        <div class="top-list">
+          <div class="top-item anim-2">
+            <div class="top-num">01</div>
+            <div><div class="top-item-text">Her laugh</div><div class="top-item-sub">Streamed 8,760 hours this year</div></div>
+          </div>
+          <div class="top-item anim-3">
+            <div class="top-num">02</div>
+            <div><div class="top-item-text">The way she looks at you</div><div class="top-item-sub">Instant serotonin. Every time.</div></div>
+          </div>
+          <div class="top-item anim-4">
+            <div class="top-num">03</div>
+            <div><div class="top-item-text">Her jokes</div><div class="top-item-sub">Bad or good, I love them both equally.</div></div>
+          </div>
+          <div class="top-item anim-5">
+            <div class="top-num">04</div>
+            <div><div class="top-item-text">How safe she makes you feel</div><div class="top-item-sub">Home isn't a place. It's her.</div></div>
+          </div>
+          <div class="top-item anim-6">
+            <div class="top-num">05</div>
+            <div><div class="top-item-text">Everything else</div><div class="top-item-sub">This list would crash Spotify's servers.</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SLIDE 7: The Ask -->
+      <div class="slide slide-7" data-duration="99999">
+        <div class="slide-eyebrow anim-1">One Last Thing...</div>
+        <div class="slide-big-text anim-2" style="font-size:clamp(2rem,7vw,3rem)">
+          Will you be my<br><span class="highlight">Valentine?</span> 💕
+        </div>
+        <div class="slide-sub anim-3">
+          This is the only song I ever want on repeat. Forever. No skip.
+        </div>
+        <div class="ask-buttons anim-4">
+          <button class="btn-valentine yes" id="btnYes">♥&ensp;Add to Playlist (Yes Forever)</button>
+          <button class="btn-valentine no" id="btnNo">Skip Track</button>
+        </div>
+        <div class="attempt-text" id="attemptText"></div>
+      </div>
+
+      <!-- SLIDE 8: Celebration -->
+      <div class="slide slide-8" data-duration="99999">
+        <div class="confetti-container" id="confettiContainer"></div>
+        <div class="celeb-emoji" style="position:relative;z-index:1">💚</div>
+        <div class="slide-big-text anim-2" style="position:relative;z-index:1">
+          Track added.<br><span class="green">Forever playlist.</span>
+        </div>
+        <div class="slide-sub anim-3" style="position:relative;z-index:1;margin-top:1.2rem">
+          You just made my entire year. Every year. All the years. I love you more than any song could ever say. ♥
+        </div>
+        <div style="position:relative;z-index:1;margin-top:2rem" class="anim-4">
+          <div class="slide-stat-label">STATUS</div>
+          <div style="font-family:'Montserrat',sans-serif;font-weight:800;font-size:1.1rem;color:var(--spotify-green-light);margin-top:.3rem">
+            ♥ VALENTINE_SECURED · ON REPEAT · NO SHUFFLE
+          </div>
+        </div>
+      </div>
+
+    </div><!-- end slides-container -->
+  </div><!-- end phone-frame -->
+</div>
+
+<script>
+const slides = document.querySelectorAll('.slide');
+const totalSlides = slides.length;
+let current = 0;
+let timer = null;
+let isOnAskSlide = false;
+
+// Build progress bars
+const progressContainer = document.getElementById('progressBars');
+for (let i = 0; i < totalSlides; i++) {
+  const seg = document.createElement('div');
+  seg.className = 'progress-segment';
+  seg.innerHTML = '<div class="fill"></div>';
+  seg.dataset.index = i;
+  progressContainer.appendChild(seg);
+}
+const segments = document.querySelectorAll('.progress-segment');
+
+function goToSlide(index) {
+  if (index < 0 || index >= totalSlides) return;
+  
+  // Don't go past ask slide unless celebration triggered
+  if (index === totalSlides - 1 && !celebrationTriggered) return;
+  
+  current = index;
+  isOnAskSlide = (current === totalSlides - 2);
+  
+  slides.forEach((s, i) => {
+    s.classList.toggle('active', i === current);
+  });
+  
+  // Update progress - force reflow to restart CSS transitions
+  segments.forEach((seg, i) => {
+    const fill = seg.querySelector('.fill');
+    seg.classList.remove('active', 'done');
+    fill.style.transition = 'none';
+    if (i < current) {
+      fill.style.width = '100%';
+      seg.classList.add('done');
+    } else if (i === current) {
+      fill.style.width = '0%';
+      // Force reflow
+      void fill.offsetWidth;
+      const duration = (current === totalSlides - 1) ? 500 : (parseInt(slides[current].dataset.duration) || 5000);
+      fill.style.transition = `width ${duration}ms linear`;
+      fill.style.width = '100%';
+      seg.classList.add('active');
+    } else {
+      fill.style.width = '0%';
+    }
+  });
+  
+  // Auto advance (except ask & celebration slides)
+  clearTimeout(timer);
+  if (current < totalSlides - 2) {
+    const duration = parseInt(slides[current].dataset.duration) || 5000;
+    timer = setTimeout(() => goToSlide(current + 1), duration);
+  }
+}
+
+// Click navigation
+document.getElementById('clickRight').addEventListener('click', () => {
+  if (isOnAskSlide || celebrationTriggered) return;
+  if (current < totalSlides - 1) goToSlide(current + 1);
+});
+
+document.getElementById('clickLeft').addEventListener('click', () => {
+  if (celebrationTriggered) return;
+  if (current > 0) goToSlide(current - 1);
+});
+
+// Keyboard
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'ArrowRight' || e.key === ' ') {
+    if (!isOnAskSlide && !celebrationTriggered && current < totalSlides - 1) goToSlide(current + 1);
+  }
+  if (e.key === 'ArrowLeft' && current > 0 && !celebrationTriggered) goToSlide(current - 1);
+});
+
+// Init
+goToSlide(0);
+
+// ── No Button ──
+const btnNo = document.getElementById('btnNo');
+const btnYes = document.getElementById('btnYes');
+const attemptText = document.getElementById('attemptText');
+let noCount = 0;
+let celebrationTriggered = false;
+
+const noLabels = [
+  "Skip Track",
+  "Are you sure?",
+  "This track is unskippable",
+  "Nice try 😏",
+  "Ad-free means no escape",
+  "Premium users can't skip this",
+  "Your plan doesn't cover this",
+  "Error: Too cute to skip",
+  "🎵 Still playing... 🎵",
+  "♥ You know you want to ♥",
+];
+
+const noMsgs = [
+  "",
+  "Spotify Premium can't save you here.",
+  "This isn't a free-tier feature, babe.",
+  "The algorithm knows what you want.",
+  "Shuffle is OFF. This is intentional.",
+  "Your queue is: love, love, more love.",
+  "Even the podcast ads want you to say yes.",
+  "I will simply keep autoplaying.",
+  "Your Discover Weekly is just my face now.",
+  "OK the playlist is literally just this one song.",
+];
+
+btnNo.addEventListener('click', () => {
+  noCount++;
+  
+  const s = Math.max(0.7, 1 - noCount * 0.04);
+  btnNo.style.transform = `scale(${s})`;
+  
+  const ys = Math.min(1.08, 1 + noCount * 0.012);
+  btnYes.style.transform = `scale(${ys})`;
+  
+  if (noCount < noLabels.length) {
+    btnNo.textContent = noLabels[noCount];
+  } else {
+    btnNo.textContent = "💔";
+    btnNo.style.pointerEvents = 'none';
+    btnNo.style.opacity = '.3';
+  }
+  
+  if (noCount < noMsgs.length) {
+    attemptText.textContent = noMsgs[noCount];
+  }
+});
+
+// ── Yes Button ──
+btnYes.addEventListener('click', () => {
+  celebrationTriggered = true;
+  goToSlide(totalSlides - 1);
+  
+  // Confetti
+  const container = document.getElementById('confettiContainer');
+  const colors = ['#1DB954','#1ed760','#F037A5','#FFA41B','#509BF5','#E8125C','#ffffff','#8D67AB'];
+  
+  function burst() {
+    for (let i = 0; i < 12; i++) {
+      const c = document.createElement('div');
+      c.className = 'confetti';
+      c.style.left = Math.random() * 100 + '%';
+      c.style.width = (Math.random() * 8 + 4) + 'px';
+      c.style.height = (Math.random() * 8 + 4) + 'px';
+      c.style.background = colors[Math.floor(Math.random() * colors.length)];
+      c.style.borderRadius = Math.random() > .5 ? '50%' : '2px';
+      c.style.animationDuration = (Math.random() * 2 + 2) + 's';
+      c.style.animationDelay = (Math.random() * .5) + 's';
+      container.appendChild(c);
+      setTimeout(() => c.remove(), 5000);
+    }
+  }
+  
+  burst(); burst(); burst();
+  setInterval(burst, 600);
+});
+</script>
+
+</body>
+</html>
