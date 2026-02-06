@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Your 2025 Wrapped</title>
+<title>Meenakshi's 2025 Wrapped</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,600;0,700;0,800;0,900;1,400;1,700;1,800&family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
@@ -74,6 +74,27 @@ html,body{
   width:100%;
   transition:width var(--slide-duration) linear;
 }
+
+/* ── MUSIC INDICATOR ── */
+.music-indicator{
+  position:absolute;bottom:1.2rem;right:1.2rem;
+  z-index:90;
+  display:flex;align-items:flex-end;gap:2px;
+  height:18px;
+  opacity:.5;
+}
+.mi-bar{
+  width:3px;
+  background:var(--white);
+  border-radius:100px;
+  animation:miPulse .6s ease infinite alternate;
+}
+.mi-bar:nth-child(1){height:6px;animation-delay:0s}
+.mi-bar:nth-child(2){height:14px;animation-delay:.15s}
+.mi-bar:nth-child(3){height:10px;animation-delay:.3s}
+.mi-bar:nth-child(4){height:16px;animation-delay:.1s}
+@keyframes miPulse{0%{height:4px}100%{height:18px}}
+.music-indicator.paused .mi-bar{animation:none;height:3px}
 
 /* ── SLIDES ── */
 .slides-container{
@@ -416,7 +437,7 @@ html,body{
 
 <div class="app">
   <div class="phone-frame">
-    
+
     <!-- Spotify Logo -->
     <div class="spotify-logo">
       <svg viewBox="0 0 24 24" fill="white"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381C8.64 5.801 15.6 6.06 20.04 8.4c.54.3.72 1.02.42 1.56-.3.42-1.02.6-1.38.72z"/></svg>
@@ -441,7 +462,7 @@ html,body{
           <div class="wrapped-title anim-2">
             Relationship<br><span class="green">Wrapped</span>
           </div>
-          <div class="intro-subtitle anim-3">A year of us. Let's look back.</div>
+          <div class="intro-subtitle anim-3">A year of us. Let's look back, Meenakshi.</div>
           <div class="equalizer anim-4">
             <div class="eq-bar"></div><div class="eq-bar"></div><div class="eq-bar"></div>
             <div class="eq-bar"></div><div class="eq-bar"></div><div class="eq-bar"></div>
@@ -455,7 +476,7 @@ html,body{
       <div class="slide slide-1" data-duration="6000">
         <div class="slide-eyebrow anim-1">Your #1 Artist</div>
         <div class="slide-big-text anim-2">
-          You listened to<br><span class="highlight">Her Voice</span><br>more than anything.
+          You listened to<br><span class="highlight">Meenakshi</span><br>more than anything.
         </div>
         <div class="slide-sub anim-3">
           She was your top artist. Your most played. Your favorite sound on Earth. Nobody else even came close.
@@ -465,7 +486,7 @@ html,body{
 
       <!-- SLIDE 2: Minutes Listened -->
       <div class="slide slide-2" data-duration="6000">
-        <div class="slide-eyebrow anim-1">Total Minutes Thinking About Her</div>
+        <div class="slide-eyebrow anim-1">Total Minutes Thinking About Meenakshi</div>
         <div class="slide-stat anim-2">525,600</div>
         <div class="slide-stat-label anim-3">MINUTES THIS YEAR</div>
         <div class="slide-sub anim-4">
@@ -477,7 +498,7 @@ html,body{
       <div class="slide slide-3" data-duration="6000">
         <div class="slide-eyebrow anim-1">Your Top Genre</div>
         <div class="slide-big-text anim-2">
-          Your #1 genre<br>was <span class="highlight">Romance.</span>
+          Your #1 genre<br>was <span style="color:var(--spotify-black)">Romance.</span>
         </div>
         <div class="slide-sub anim-3">
           Followed by Cheesy, Over-the-top, and Can't-stop-staring-at-her. A very specific taste.
@@ -488,7 +509,7 @@ html,body{
       <div class="slide slide-4" data-duration="6000">
         <div class="slide-eyebrow anim-1">Most Replayed Moment</div>
         <div class="slide-big-text anim-2">
-          The first time<br>you made<br>her <span style="color:#191414">laugh.</span>
+          The first time<br><span style="color:#191414">Meenakshi</span><br>laughed at <span style="color:#191414">your joke.</span>
         </div>
         <div class="slide-sub anim-3">
           You've replayed that moment 4,729 times in your head. And it still hits the same way every single time.
@@ -513,12 +534,12 @@ html,body{
       <div class="slide slide-6" data-duration="9000">
         <div class="slide-eyebrow anim-1">Your Top 5</div>
         <div class="slide-big-text anim-2" style="font-size:clamp(1.6rem,5.5vw,2.2rem);margin-bottom:.5rem">
-          Top reasons she's<br>your <span class="highlight">favorite song.</span>
+          Top reasons <span class="highlight">Meenakshi</span> is<br>your <span class="highlight">favorite song.</span>
         </div>
         <div class="top-list">
           <div class="top-item anim-2">
             <div class="top-num">01</div>
-            <div><div class="top-item-text">Her laugh</div><div class="top-item-sub">Streamed 8,760 hours this year</div></div>
+            <div><div class="top-item-text">Meenakshi's laugh</div><div class="top-item-sub">Streamed 8,760 hours this year</div></div>
           </div>
           <div class="top-item anim-3">
             <div class="top-num">02</div>
@@ -526,11 +547,11 @@ html,body{
           </div>
           <div class="top-item anim-4">
             <div class="top-num">03</div>
-            <div><div class="top-item-text">Her jokes</div><div class="top-item-sub">Bad or good, I love them both equally.</div></div>
+            <div><div class="top-item-text">Meenakshi's jokes</div><div class="top-item-sub">Bad or good, I love them both equally.</div></div>
           </div>
           <div class="top-item anim-5">
             <div class="top-num">04</div>
-            <div><div class="top-item-text">How safe she makes you feel</div><div class="top-item-sub">Home isn't a place. It's her.</div></div>
+            <div><div class="top-item-text">How safe she makes you feel</div><div class="top-item-sub">Home isn't a place. It's Meenakshi.</div></div>
           </div>
           <div class="top-item anim-6">
             <div class="top-num">05</div>
@@ -543,7 +564,7 @@ html,body{
       <div class="slide slide-7" data-duration="99999">
         <div class="slide-eyebrow anim-1">One Last Thing...</div>
         <div class="slide-big-text anim-2" style="font-size:clamp(2rem,7vw,3rem)">
-          Will you be my<br><span class="highlight">Valentine?</span> 💕
+          Meenakshi,<br>will you be my<br><span class="highlight">Valentine?</span> 💕
         </div>
         <div class="slide-sub anim-3">
           This is the only song I ever want on repeat. Forever. No skip.
@@ -563,7 +584,7 @@ html,body{
           Track added.<br><span class="green">Forever playlist.</span>
         </div>
         <div class="slide-sub anim-3" style="position:relative;z-index:1;margin-top:1.2rem">
-          You just made my entire year. Every year. All the years. I love you more than any song could ever say. ♥
+          Meenakshi, you just made my entire year. Every year. All the years. I love you more than any song could ever say. ♥
         </div>
         <div style="position:relative;z-index:1;margin-top:2rem" class="anim-4">
           <div class="slide-stat-label">STATUS</div>
@@ -574,6 +595,15 @@ html,body{
       </div>
 
     </div><!-- end slides-container -->
+    <!-- Audio -->
+    <audio id="bgMusic" preload="auto" src="chaudhary.mp3"></audio>
+    <audio id="laughAudio" preload="auto" src="her-laugh.m4a"></audio>
+
+    <!-- Music indicator -->
+    <div class="music-indicator" id="musicIndicator">
+      <div class="mi-bar"></div><div class="mi-bar"></div><div class="mi-bar"></div><div class="mi-bar"></div>
+    </div>
+
   </div><!-- end phone-frame -->
 </div>
 
@@ -597,17 +627,17 @@ const segments = document.querySelectorAll('.progress-segment');
 
 function goToSlide(index) {
   if (index < 0 || index >= totalSlides) return;
-  
+
   // Don't go past ask slide unless celebration triggered
   if (index === totalSlides - 1 && !celebrationTriggered) return;
-  
+
   current = index;
   isOnAskSlide = (current === totalSlides - 2);
-  
+
   slides.forEach((s, i) => {
     s.classList.toggle('active', i === current);
   });
-  
+
   // Update progress - force reflow to restart CSS transitions
   segments.forEach((seg, i) => {
     const fill = seg.querySelector('.fill');
@@ -628,7 +658,7 @@ function goToSlide(index) {
       fill.style.width = '0%';
     }
   });
-  
+
   // Auto advance (except ask & celebration slides)
   clearTimeout(timer);
   if (current < totalSlides - 2) {
@@ -639,11 +669,13 @@ function goToSlide(index) {
 
 // Click navigation
 document.getElementById('clickRight').addEventListener('click', () => {
+  startMusic();
   if (isOnAskSlide || celebrationTriggered) return;
   if (current < totalSlides - 1) goToSlide(current + 1);
 });
 
 document.getElementById('clickLeft').addEventListener('click', () => {
+  startMusic();
   if (celebrationTriggered) return;
   if (current > 0) goToSlide(current - 1);
 });
@@ -694,13 +726,13 @@ const noMsgs = [
 
 btnNo.addEventListener('click', () => {
   noCount++;
-  
+
   const s = Math.max(0.7, 1 - noCount * 0.04);
   btnNo.style.transform = `scale(${s})`;
-  
+
   const ys = Math.min(1.08, 1 + noCount * 0.012);
   btnYes.style.transform = `scale(${ys})`;
-  
+
   if (noCount < noLabels.length) {
     btnNo.textContent = noLabels[noCount];
   } else {
@@ -708,21 +740,77 @@ btnNo.addEventListener('click', () => {
     btnNo.style.pointerEvents = 'none';
     btnNo.style.opacity = '.3';
   }
-  
+
   if (noCount < noMsgs.length) {
     attemptText.textContent = noMsgs[noCount];
   }
 });
 
+// ── Audio Control ──
+const bgMusic = document.getElementById('bgMusic');
+const laughAudio = document.getElementById('laughAudio');
+const musicIndicator = document.getElementById('musicIndicator');
+let musicStarted = false;
+
+bgMusic.currentTime = 60; // Start from 1:00
+
+// Loop from 1:00 when song ends
+bgMusic.addEventListener('ended', () => {
+  bgMusic.currentTime = 60;
+  bgMusic.play();
+});
+
+function startMusic() {
+  if (musicStarted) return;
+  musicStarted = true;
+  bgMusic.currentTime = 60;
+  bgMusic.play().catch(() => {});
+  musicIndicator.classList.remove('paused');
+}
+
+// Try autoplay when preloader finishes
+setTimeout(() => {
+  bgMusic.currentTime = 60;
+  bgMusic.play().then(() => {
+    musicStarted = true;
+    musicIndicator.classList.remove('paused');
+  }).catch(() => {
+    // Browser blocked autoplay — will start on first interaction
+    musicIndicator.classList.add('paused');
+  });
+}, 2400);
+
+// Fallback: start on first interaction if autoplay was blocked
+function firstInteraction() {
+  startMusic();
+  document.removeEventListener('click', firstInteraction);
+  document.removeEventListener('touchstart', firstInteraction);
+}
+document.addEventListener('click', firstInteraction);
+document.addEventListener('touchstart', firstInteraction);
+
 // ── Yes Button ──
 btnYes.addEventListener('click', () => {
   celebrationTriggered = true;
   goToSlide(totalSlides - 1);
-  
+
+  // Stop bg music, play laugh
+  bgMusic.pause();
+  bgMusic.currentTime = 0;
+  musicIndicator.classList.add('paused');
+  laughAudio.currentTime = 0;
+  laughAudio.play().catch(() => {});
+
+  // Loop laugh audio
+  laughAudio.addEventListener('ended', () => {
+    laughAudio.currentTime = 0;
+    laughAudio.play();
+  });
+
   // Confetti
   const container = document.getElementById('confettiContainer');
   const colors = ['#1DB954','#1ed760','#F037A5','#FFA41B','#509BF5','#E8125C','#ffffff','#8D67AB'];
-  
+
   function burst() {
     for (let i = 0; i < 12; i++) {
       const c = document.createElement('div');
@@ -738,7 +826,7 @@ btnYes.addEventListener('click', () => {
       setTimeout(() => c.remove(), 5000);
     }
   }
-  
+
   burst(); burst(); burst();
   setInterval(burst, 600);
 });
