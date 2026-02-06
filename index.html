@@ -437,7 +437,7 @@ html,body{
 
 <div class="app">
   <div class="phone-frame">
-
+    
     <!-- Spotify Logo -->
     <div class="spotify-logo">
       <svg viewBox="0 0 24 24" fill="white"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381C8.64 5.801 15.6 6.06 20.04 8.4c.54.3.72 1.02.42 1.56-.3.42-1.02.6-1.38.72z"/></svg>
@@ -627,17 +627,17 @@ const segments = document.querySelectorAll('.progress-segment');
 
 function goToSlide(index) {
   if (index < 0 || index >= totalSlides) return;
-
+  
   // Don't go past ask slide unless celebration triggered
   if (index === totalSlides - 1 && !celebrationTriggered) return;
-
+  
   current = index;
   isOnAskSlide = (current === totalSlides - 2);
-
+  
   slides.forEach((s, i) => {
     s.classList.toggle('active', i === current);
   });
-
+  
   // Update progress - force reflow to restart CSS transitions
   segments.forEach((seg, i) => {
     const fill = seg.querySelector('.fill');
@@ -658,26 +658,117 @@ function goToSlide(index) {
       fill.style.width = '0%';
     }
   });
-
+  
   // Auto advance (except ask & celebration slides)
   clearTimeout(timer);
   if (current < totalSlides - 2) {
     const duration = parseInt(slides[current].dataset.duration) || 5000;
+    slideStartTime = Date.now();
     timer = setTimeout(() => goToSlide(current + 1), duration);
   }
 }
 
-// Click navigation
-document.getElementById('clickRight').addEventListener('click', () => {
+// Click zones - hold to pause, release to resume
+let holdTimeout = null;
+let isHolding = false;
+let pausedTimeRemaining = 0;
+let slideStartTime = 0;
+
+function pauseSlide() {
+  isHolding = true;
+  clearTimeout(timer);
+  // Calculate remaining time
+  const elapsed = Date.now() - slideStartTime;
+  const duration = parseInt(slides[current].dataset.duration) || 5000;
+  pausedTimeRemaining = Math.max(0, duration - elapsed);
+  // Pause progress bar
+  const fill = segments[current].querySelector('.fill');
+  const computedWidth = getComputedStyle(fill).width;
+  fill.style.transition = 'none';
+  fill.style.width = computedWidth;
+}
+
+function resumeSlide() {
+  if (!isHolding) return;
+  isHolding = false;
+  // Resume progress bar
+  const fill = segments[current].querySelector('.fill');
+  void fill.offsetWidth;
+  fill.style.transition = `width ${pausedTimeRemaining}ms linear`;
+  fill.style.width = '100%';
+  slideStartTime = Date.now() - ((parseInt(slides[current].dataset.duration) || 5000) - pausedTimeRemaining);
+  // Resume auto advance
+  if (current < totalSlides - 2) {
+    timer = setTimeout(() => goToSlide(current + 1), pausedTimeRemaining);
+  }
+}
+
+// Right click zone
+const clickRight = document.getElementById('clickRight');
+clickRight.addEventListener('mousedown', (e) => {
+  e.preventDefault();
+  holdTimeout = setTimeout(() => pauseSlide(), 150);
+});
+clickRight.addEventListener('mouseup', () => {
+  if (isHolding) { resumeSlide(); return; }
+  clearTimeout(holdTimeout);
   startMusic();
   if (isOnAskSlide || celebrationTriggered) return;
   if (current < totalSlides - 1) goToSlide(current + 1);
 });
+clickRight.addEventListener('mouseleave', () => {
+  if (isHolding) resumeSlide();
+  clearTimeout(holdTimeout);
+});
 
-document.getElementById('clickLeft').addEventListener('click', () => {
+// Touch events for right zone
+clickRight.addEventListener('touchstart', (e) => {
+  holdTimeout = setTimeout(() => pauseSlide(), 150);
+}, {passive: true});
+clickRight.addEventListener('touchend', (e) => {
+  if (isHolding) { resumeSlide(); return; }
+  clearTimeout(holdTimeout);
+  startMusic();
+  if (isOnAskSlide || celebrationTriggered) return;
+  if (current < totalSlides - 1) goToSlide(current + 1);
+});
+clickRight.addEventListener('touchcancel', () => {
+  if (isHolding) resumeSlide();
+  clearTimeout(holdTimeout);
+});
+
+// Left click zone
+const clickLeft = document.getElementById('clickLeft');
+clickLeft.addEventListener('mousedown', (e) => {
+  e.preventDefault();
+  holdTimeout = setTimeout(() => pauseSlide(), 150);
+});
+clickLeft.addEventListener('mouseup', () => {
+  if (isHolding) { resumeSlide(); return; }
+  clearTimeout(holdTimeout);
   startMusic();
   if (celebrationTriggered) return;
   if (current > 0) goToSlide(current - 1);
+});
+clickLeft.addEventListener('mouseleave', () => {
+  if (isHolding) resumeSlide();
+  clearTimeout(holdTimeout);
+});
+
+// Touch events for left zone
+clickLeft.addEventListener('touchstart', (e) => {
+  holdTimeout = setTimeout(() => pauseSlide(), 150);
+}, {passive: true});
+clickLeft.addEventListener('touchend', (e) => {
+  if (isHolding) { resumeSlide(); return; }
+  clearTimeout(holdTimeout);
+  startMusic();
+  if (celebrationTriggered) return;
+  if (current > 0) goToSlide(current - 1);
+});
+clickLeft.addEventListener('touchcancel', () => {
+  if (isHolding) resumeSlide();
+  clearTimeout(holdTimeout);
 });
 
 // Keyboard
@@ -726,13 +817,13 @@ const noMsgs = [
 
 btnNo.addEventListener('click', () => {
   noCount++;
-
+  
   const s = Math.max(0.7, 1 - noCount * 0.04);
   btnNo.style.transform = `scale(${s})`;
-
+  
   const ys = Math.min(1.08, 1 + noCount * 0.012);
   btnYes.style.transform = `scale(${ys})`;
-
+  
   if (noCount < noLabels.length) {
     btnNo.textContent = noLabels[noCount];
   } else {
@@ -740,7 +831,7 @@ btnNo.addEventListener('click', () => {
     btnNo.style.pointerEvents = 'none';
     btnNo.style.opacity = '.3';
   }
-
+  
   if (noCount < noMsgs.length) {
     attemptText.textContent = noMsgs[noCount];
   }
@@ -751,33 +842,47 @@ const bgMusic = document.getElementById('bgMusic');
 const laughAudio = document.getElementById('laughAudio');
 const musicIndicator = document.getElementById('musicIndicator');
 let musicStarted = false;
+const SONG_START = 60; // Start from 1:00
 
-bgMusic.currentTime = 60; // Start from 1:00
+// Ensure start position whenever playback begins
+bgMusic.addEventListener('playing', () => {
+  if (bgMusic.currentTime < SONG_START - 1) {
+    bgMusic.currentTime = SONG_START;
+  }
+});
 
 // Loop from 1:00 when song ends
 bgMusic.addEventListener('ended', () => {
-  bgMusic.currentTime = 60;
+  bgMusic.currentTime = SONG_START;
   bgMusic.play();
 });
 
 function startMusic() {
   if (musicStarted) return;
   musicStarted = true;
-  bgMusic.currentTime = 60;
-  bgMusic.play().catch(() => {});
-  musicIndicator.classList.remove('paused');
+  bgMusic.currentTime = SONG_START;
+  const playAttempt = bgMusic.play();
+  if (playAttempt) {
+    playAttempt.then(() => {
+      bgMusic.currentTime = SONG_START;
+      musicIndicator.classList.remove('paused');
+    }).catch(() => {});
+  }
 }
 
 // Try autoplay when preloader finishes
 setTimeout(() => {
-  bgMusic.currentTime = 60;
-  bgMusic.play().then(() => {
-    musicStarted = true;
-    musicIndicator.classList.remove('paused');
-  }).catch(() => {
-    // Browser blocked autoplay — will start on first interaction
-    musicIndicator.classList.add('paused');
-  });
+  bgMusic.currentTime = SONG_START;
+  const p = bgMusic.play();
+  if (p) {
+    p.then(() => {
+      musicStarted = true;
+      bgMusic.currentTime = SONG_START;
+      musicIndicator.classList.remove('paused');
+    }).catch(() => {
+      musicIndicator.classList.add('paused');
+    });
+  }
 }, 2400);
 
 // Fallback: start on first interaction if autoplay was blocked
@@ -793,24 +898,24 @@ document.addEventListener('touchstart', firstInteraction);
 btnYes.addEventListener('click', () => {
   celebrationTriggered = true;
   goToSlide(totalSlides - 1);
-
+  
   // Stop bg music, play laugh
   bgMusic.pause();
   bgMusic.currentTime = 0;
   musicIndicator.classList.add('paused');
   laughAudio.currentTime = 0;
   laughAudio.play().catch(() => {});
-
+  
   // Loop laugh audio
   laughAudio.addEventListener('ended', () => {
     laughAudio.currentTime = 0;
     laughAudio.play();
   });
-
+  
   // Confetti
   const container = document.getElementById('confettiContainer');
   const colors = ['#1DB954','#1ed760','#F037A5','#FFA41B','#509BF5','#E8125C','#ffffff','#8D67AB'];
-
+  
   function burst() {
     for (let i = 0; i < 12; i++) {
       const c = document.createElement('div');
@@ -826,7 +931,7 @@ btnYes.addEventListener('click', () => {
       setTimeout(() => c.remove(), 5000);
     }
   }
-
+  
   burst(); burst(); burst();
   setInterval(burst, 600);
 });
